@@ -6,7 +6,7 @@ export const StockMovementRepository = {
   create(stockMovement: StockMovement): StockMovement {
     const movement = this.getByStockMovementId(stockMovement.id)
 
-    if(!movement){
+    if(movement){
       throw new Error('Stock movement does not exist')
     }
 
@@ -16,7 +16,7 @@ export const StockMovementRepository = {
   },
 
   getAll(): Array<StockMovement>{
-    return stockMovements
+    return [...stockMovements]
   },
 
   getByStockMovementId(stockMovementId: string): StockMovement {

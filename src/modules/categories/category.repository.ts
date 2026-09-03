@@ -25,7 +25,7 @@ export const CategoryRepository = {
   },
 
   getAll(): Array<Category>{
-    return categories
+    return [...categories]
   },
 
   getById(categoryId: string): Category {
