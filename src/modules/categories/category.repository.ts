@@ -29,7 +29,7 @@ export const CategoryRepository = {
   },
 
   getById(categoryId: string): Category {
-    const category = categories.find(category => category.id = categoryId)
+    const category = categories.find(category => category.id === categoryId)
 
     if(!category)
       throw new Error('Category does not exist')
@@ -52,7 +52,7 @@ export const CategoryRepository = {
       throw new Error('Category does not exist')
     }
 
-    categories.slice(index, 1)
+    categories.splice(index, 1)
 
     return true
   }
