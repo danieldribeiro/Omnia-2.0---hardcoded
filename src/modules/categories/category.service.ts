@@ -17,7 +17,7 @@ export const CategoryService = {
   },
 
   update(categoryId: string, data: UpdateCategory): Category {
-    const category = this.getById(categoryId)
+    this.getById(categoryId)
 
     const updatedCategory = CategoryRepository.update(categoryId, data)
 
