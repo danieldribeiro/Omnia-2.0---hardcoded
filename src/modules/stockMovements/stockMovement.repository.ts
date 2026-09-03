@@ -4,15 +4,9 @@ const stockMovements: Array<StockMovement> = []
 
 export const StockMovementRepository = {
   create(stockMovement: StockMovement): StockMovement {
-    const movement = this.getByStockMovementId(stockMovement.id)
+    stockMovements.push(stockMovement)
 
-    if(movement){
-      throw new Error('Stock movement does not exist')
-    }
-
-    stockMovements.push(movement)
-
-    return movement
+    return stockMovement
   },
 
   getAll(): Array<StockMovement>{
@@ -29,8 +23,8 @@ export const StockMovementRepository = {
     return stockMovement
   },
 
-  getByProductId(productId: string): StockMovement {
-    const movement = stockMovements.find(movement => movement.productId === productId)
+  getByProductId(productId: string): Array<StockMovement> {
+    const movement = stockMovements.filter(movement => movement.productId === productId)
 
     if(!movement){
       throw new Error('Product had not been moved yet')

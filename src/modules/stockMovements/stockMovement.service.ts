@@ -14,10 +14,27 @@ export const StockMovementService = {
   },
 
   create(stockMovement: StockMovement): StockMovement{
+    this.verifyProduct(stockMovement.productId)
+
+    const product = ProductRepository.getById(stockMovement.productId)
     const movement = StockMovementRepository.getByStockMovementId(stockMovement.id)
 
     if(movement){
       throw new Error('Duplicated stock movement')
+    }
+
+    if(stockMovement.type === 'ENTRY' && stockMovement.reason !== 'BUY'){
+      throw new Error('Invalid reason for entry movement')
+    } else if (stockMovement.type === 'EXIT' && stockMovement.reason === 'BUY'){
+      throw new Error('Invalid reason for exit movement')
+    }
+
+    if(stockMovement.unit === 'PACK' && !product.quantityPerPack){
+      throw new Error('Product is not packed')
+    } else if(stockMovement.unit === 'PACK' && product.quantityPerPack){
+      product.quantity += stockMovement.quantity * product.quantityPerPack
+    } else {
+      product.quantity += stockMovement.quantity
     }
 
     const newMovement: StockMovement = { 
@@ -28,8 +45,6 @@ export const StockMovementService = {
       type: stockMovement.type,
       unit: stockMovement.unit
     }
-
-    this.verifyProduct(newMovement.productId)
 
     return StockMovementRepository.create(newMovement)
   },
@@ -42,7 +57,7 @@ export const StockMovementService = {
     return StockMovementRepository.getByStockMovementId(stockMovementId)
   },
 
-  getByProductId(productId: string): StockMovement {
+  getByProductId(productId: string): Array<StockMovement> {
     return StockMovementRepository.getByProductId(productId)
   },
 
